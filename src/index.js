@@ -35,11 +35,11 @@ export default class NextDropdown {
    * @param {string} [innerHTML = '']
    * @return {HTMLElement}
    */
-  _createElement(name = "div", { attributes = {}, innerHTML = "" } = {}) {
-    if (typeof name !== "string") {
+  _createElement(tagName = "div", { attributes = {}, innerHTML = "" } = {}) {
+    if (typeof tagName !== "string") {
       return null;
     }
-    const element = document.createElement(name);
+    const element = document.createElement(tagName);
     element.innerHTML = innerHTML;
     Object.entries(attributes).forEach(([key, val]) => val && element.setAttribute(key, `${val}`));
     return element;
@@ -203,7 +203,7 @@ export default class NextDropdown {
     const targetRect = this.target.getBoundingClientRect();
     const { scrollTop, scrollLeft } = document.documentElement;
     const { left: tLeft, top: tTop, right: tRight, bottom: tBottom, width: tWidth } = targetRect;
-    const containerRect = this.container.getBoundingClientRect();
+    const containerRect = this.container?.getBoundingClientRect() || {};
     const { width: cWidth, height: cHeight } = containerRect;
 
     switch (direction) {

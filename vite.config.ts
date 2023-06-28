@@ -23,7 +23,7 @@ const getPascalCaseName = () => {
   }
 };
 
-const fileName = {
+const fileNames = {
   es: `${outputName}.es.js`,
   umd: `${outputName}.umd.js`,
   iife: `${outputName}.iife.js`,
@@ -45,7 +45,7 @@ module.exports = defineConfig({
       entry: path.resolve(__dirname, "src/index.js"),
       name: getPascalCaseName(),
       formats: ["es", "umd", "iife"],
-      fileName: (format) => fileName[format],
+      fileName: (format) => fileNames[format],
     },
   },
   plugins: [banner(pkgInfo), styleInject()],
