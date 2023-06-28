@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Next dropdown</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
+        Cantarell, "Helvetica Neue", sans-serif;
+    }
+
+    #app {
+      text-align: center;
+    }
+
+    .flex {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      padding: 6rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <h1>Next-Dropdown</h1>
+    <p>
+      <a href="https://github.com/lyove/next-dropdown" target="_blank">Next-Dropdown Github</a>
+    </p>
+    <div class="flex">
+      <div class="button-item" data-dropdown-direction="bottom-left">
+        <button>Bottom left</button>
+      </div>
+
+      <div class="button-item" data-dropdown-direction="bottom-right">
+        <button>Bottom right</button>
+      </div>
+
+      <div class="button-item" data-dropdown-direction="bottom-middle">
+        <button>Bottom middle</button>
+      </div>
+
+      <div class="button-item" data-dropdown-direction="top-left">
+        <button>Top left</button>
+      </div>
+
+      <div class="button-item" data-dropdown-direction="top-right">
+        <button>Top right</button>
+      </div>
+
+      <div class="button-item" data-dropdown-direction="top-middle">
+        <button>Top middle</button>
+      </div>
+    </div>
+    <script type="module">
+      import Dropdown from "./src/index.js";
+
+      const targets = document.querySelectorAll(".button-item");
+      Array.from(targets).forEach((target) => {
+        const content = document.createElement('div');
+        content.innerHTML = 'bottom-left';
+        new Dropdown(target, content, {
+          direction: target.dataset.dropdownDirection,
+          onOpen: function () {
+            console.log("is open");
+          },
+          onClose: function () {
+            console.log("is now closed");
+          }
+        });
+      });
+    </script>
+</body>
+
+</html>
