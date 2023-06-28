@@ -43,7 +43,7 @@ new NextDropdown(target, content, {
 
 ```
 <link rel="stylesheet" href="https://unpkg.com/next-dropdown@latest/dist/style.css">
-<script src="https://unpkg.com/next-dropdown@latest/dist/next-dropdown.umd.js"></script>
+<script src="https://unpkg.com/next-dropdown@latest/dist/dropdown.umd.js"></script>
 
 const NextDropdown = window.NextDropdown;
 const dropdown = new NextDropdown(trigger, content, options);
