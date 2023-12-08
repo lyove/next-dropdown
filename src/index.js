@@ -1,10 +1,63 @@
 import "./style.css";
 
+// class name
 const ClassPrefix = "next-dropdown";
 
+/**
+ * Creates HTML element in editor document
+ *
+ * @param {string} name
+ * @param {Object.<string, string>} [attributes = {}]
+ * @param {string} [innerHTML = '']
+ * @return {HTMLElement}
+ */
+const createElement = (tagName = "div", { attributes = {}, innerHTML = "" } = {}) => {
+  if (typeof tagName !== "string") {
+    return null;
+  }
+  const element = document.createElement(tagName);
+  element.innerHTML = innerHTML;
+  Object.entries(attributes).forEach(([key, val]) => val && element.setAttribute(key, `${val}`));
+  return element;
+};
+
+/**
+ * Remove all child elements of a DOM node
+ *
+ * @return {HTMLElement} element
+ */
+const removeElementChild = (element) => {
+  if (!(element instanceof HTMLElement)) {
+    return;
+  }
+  while (element.firstChild) {
+    element.removeChild(element.lastChild);
+  }
+};
+
+/**
+ * Globally Unique Identifier
+ * @returns {string}
+ */
+const guid = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
+const findAncestor = (el, cls) => {
+  while ((el = el.parentElement) && !el.classList.contains(cls));
+  return el;
+};
+
+/**
+ * NextDropdown
+ */
 export default class NextDropdown {
   constructor(target, content, options) {
-    this.key = this._guid();
+    this.key = guid();
     this.target = target;
     this.container = null;
     this.content = content;
@@ -18,100 +71,22 @@ export default class NextDropdown {
       beforeOpen: null,
       beforeClose: null,
     };
-    this.options = this._extendObject({}, this.defaults, options);
+    this.options = Object.assign({}, this.defaults, options);
 
-    this.init();
-  }
-
-  /**
-   * Helpers
-   */
-
-  /**
-   * Creates HTML element in editor document
-   *
-   * @param {string} name
-   * @param {Object.<string, string>} [attributes = {}]
-   * @param {string} [innerHTML = '']
-   * @return {HTMLElement}
-   */
-  _createElement(tagName = "div", { attributes = {}, innerHTML = "" } = {}) {
-    if (typeof tagName !== "string") {
-      return null;
-    }
-    const element = document.createElement(tagName);
-    element.innerHTML = innerHTML;
-    Object.entries(attributes).forEach(([key, val]) => val && element.setAttribute(key, `${val}`));
-    return element;
-  }
-
-  /**
-   * Remove all child elements of a DOM node
-   *
-   * @return {HTMLElement} element
-   */
-  _removeElementChild(element) {
-    if (!(element instanceof HTMLElement)) {
-      return;
-    }
-    while (element.firstChild) {
-      element.removeChild(element.lastChild);
-    }
-  }
-
-  /**
-   * Globally Unique Identifier
-   * @returns {string}
-   */
-  _guid() {
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-      const r = (Math.random() * 16) | 0;
-      const v = c === "x" ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    });
-  }
-
-  _stringToDom(htmlString = "") {
-    const div = document.createElement("div");
-    div.innerHTML = htmlString.trim();
-    return div.firstChild;
-  }
-
-  _extendObject() {
-    for (let i = 1; i < arguments.length; i++) {
-      for (let key in arguments[i]) {
-        if (Object.prototype.hasOwnProperty.call(arguments[i], key)) {
-          arguments[0][key] = arguments[i][key];
-        }
-      }
-    }
-    return arguments[0];
-  }
-
-  _findAncestor(el, cls) {
-    while ((el = el.parentElement) && !el.classList.contains(cls));
-    return el;
-  }
-
-  /**
-   * Init
-   */
-  init() {
+    // init
     this.target.classList.add(this.triggerClass);
     this.target.setAttribute("data-dropdown-key", this.key);
-    this._bindEvents();
+    this.#bindEvents();
   }
 
-  /**
-   * Event
-   */
-  _bindEvents() {
+  // Event
+  #bindEvents() {
     // Close menu when mouthclick outside menu
     document.addEventListener("click", (event) => {
       if (
         !(
-          this._findAncestor(event.target, this.triggerClass) === this.target ||
-          this._findAncestor(event.target, this.dropdownClass) === this.container
+          findAncestor(event.target, this.triggerClass) === this.target ||
+          findAncestor(event.target, this.dropdownClass) === this.container
         )
       ) {
         if (this.target.classList.contains(this.showClass)) {
@@ -138,12 +113,8 @@ export default class NextDropdown {
     });
   }
 
-  /**
-   * Constructors
-   */
-
-  // Construct dropdown struture
-  _constructDropdown() {
+  // Create dropdown struture
+  #createDropdown() {
     const dropdownKey = this.target.getAttribute("data-dropdown-key");
     const container = document.querySelector(`.${this.dropdownClass}`);
     if (container) {
@@ -154,7 +125,7 @@ export default class NextDropdown {
 
     this.container =
       container ||
-      this._createElement("div", {
+      createElement("div", {
         attributes: {
           class: this.dropdownClass,
           "data-dropdown-key": dropdownKey,
@@ -166,7 +137,7 @@ export default class NextDropdown {
     this.container.textContent = "";
     this.container.style.position = "absolute";
 
-    const dropdownContent = this._createElement("div", {
+    const dropdownContent = createElement("div", {
       attributes: {
         class: `${ClassPrefix}-content`,
       },
@@ -184,7 +155,7 @@ export default class NextDropdown {
   }
 
   // Destory dropdown content
-  _destoryDropdown() {
+  #destoryDropdown() {
     if (document.body.contains(this.container)) {
       document.body.removeChild(this.container);
     }
@@ -193,11 +164,13 @@ export default class NextDropdown {
 
   // Open dropdown
   open() {
-    this._beforeOpen();
+    if (this.options.beforeOpen) {
+      this.options.beforeOpen();
+    }
 
     this.target.classList.add(this.showClass);
 
-    this._constructDropdown();
+    this.#createDropdown();
 
     const { direction } = this.options;
     const targetRect = this.target.getBoundingClientRect();
@@ -240,46 +213,24 @@ export default class NextDropdown {
       default:
     }
 
-    this._onOpen();
-  }
-
-  // Close dropdown
-  close() {
-    this._beforeClose();
-    this.target.classList.remove(this.showClass);
-    const targetKey = this.target.getAttribute("data-dropdown-key");
-    const dropdownKey = this.container.getAttribute("data-dropdown-key");
-    if (targetKey === dropdownKey) {
-      this._destoryDropdown();
-    }
-    this._onClose();
-  }
-
-  /**
-   * Callback methods
-   */
-
-  _onOpen() {
     if (this.options.onOpen) {
       this.options.onOpen();
     }
   }
 
-  _onClose() {
-    if (this.options.onClose) {
-      this.options.onClose();
-    }
-  }
-
-  _beforeOpen() {
-    if (this.options.beforeOpen) {
-      this.options.beforeOpen();
-    }
-  }
-
-  _beforeClose() {
+  // Close dropdown
+  close() {
     if (this.options.beforeClose) {
       this.options.beforeClose();
+    }
+    this.target.classList.remove(this.showClass);
+    const targetKey = this.target.getAttribute("data-dropdown-key");
+    const dropdownKey = this.container.getAttribute("data-dropdown-key");
+    if (targetKey === dropdownKey) {
+      this.#destoryDropdown();
+    }
+    if (this.options.onClose) {
+      this.options.onClose();
     }
   }
 }
