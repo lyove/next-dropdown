@@ -48,7 +48,9 @@ const guid = () => {
 };
 
 const findAncestor = (el, cls) => {
-  while ((el = el.parentElement) && !el.classList.contains(cls));
+  while (el && !el.classList.contains(cls)) {
+    el = el.parentElement;
+  }
   return el;
 };
 
