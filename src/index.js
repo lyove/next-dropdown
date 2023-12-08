@@ -146,7 +146,8 @@ export default class NextDropdown {
     if (typeof this.content === "string") {
       dropdownContent.innerHTML = this.content;
     } else if (this.content instanceof HTMLElement) {
-      dropdownContent.appendChild(this.content);
+      const clonedElement = this.content.cloneNode(true);
+      dropdownContent.appendChild(clonedElement);
     }
 
     this.container?.appendChild(dropdownContent);
