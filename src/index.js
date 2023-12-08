@@ -183,6 +183,11 @@ export default class NextDropdown {
     const { width: cWidth, height: cHeight } = containerRect;
 
     switch (direction) {
+      case "bottom":
+        this.container.style.left = `${tLeft - (cWidth - tWidth) / 2 + scrollLeft}px`;
+        this.container.style.top = `${tBottom + scrollTop}px`;
+        break;
+
       case "bottom-left":
         this.container.style.left = `${tLeft + scrollLeft}px`;
         this.container.style.top = `${tBottom + scrollTop}px`;
@@ -193,9 +198,9 @@ export default class NextDropdown {
         this.container.style.top = `${tBottom + scrollTop}px`;
         break;
 
-      case "bottom-middle":
+      case "top":
         this.container.style.left = `${tLeft - (cWidth - tWidth) / 2 + scrollLeft}px`;
-        this.container.style.top = `${tBottom + scrollTop}px`;
+        this.container.style.top = `${tTop - cHeight + scrollTop}px`;
         break;
 
       case "top-left":
@@ -205,11 +210,6 @@ export default class NextDropdown {
 
       case "top-right":
         this.container.style.left = `${tLeft - (cWidth - tWidth) + scrollLeft}px`;
-        this.container.style.top = `${tTop - cHeight + scrollTop}px`;
-        break;
-
-      case "top-middle":
-        this.container.style.left = `${tLeft - (cWidth - tWidth) / 2 + scrollLeft}px`;
         this.container.style.top = `${tTop - cHeight + scrollTop}px`;
         break;
 
