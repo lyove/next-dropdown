@@ -1,6 +1,8 @@
 # Next-Dropdown
 A lightweight dropdown plugin based on vanilla js
 
+⚠️ The project is no longer maintained. Prefer [Next-Popover](https://github.com/lyove/next-popover), which is lightweight and much more capable.
+
 ## ⭐️ Features
 
 - Hybrid support - CommonJS and ESM modules
