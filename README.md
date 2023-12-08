@@ -3,17 +3,6 @@ A lightweight dropdown plugin based on vanilla js
 
 ⚠️ The project is no longer maintained. Prefer [Next-Popover](https://github.com/lyove/next-popover), which is lightweight and much more capable.
 
-## ⭐️ Features
-
-- Hybrid support - CommonJS and ESM modules
-- IIFE bundle for direct browser support without bundler
-- Typings bundle
-- ESLint - scripts linter
-- Stylelint - styles linter
-- Prettier - formatter
-- Jest - test framework
-- Husky + lint-staged - pre-commit git hook set up for formatting
-
 ## 📦 Getting Started
 
 ```
@@ -31,7 +20,7 @@ const content = document.createElement('div');
 content.innerHTML = 'dropdown content';
 
 new NextDropdown(target, content, {
-    direction: "bottom-middle",
+    direction: "bottom",
     onOpen: function () {
         console.log("is open");
     },
@@ -51,7 +40,3 @@ const NextDropdown = window.NextDropdown;
 const dropdown = new NextDropdown(trigger, content, options);
 ...
 ```
-
-## ✅ About
-
-- [Next-Dropdown](https://github.com/lyove/next-dropdown) - Next-Dropdown
