@@ -57,24 +57,25 @@
         <button>Top middle</button>
       </div>
     </div>
-    <script type="module">
-      import Dropdown from "./src/index.js";
+  </div>
+  <script type="module">
+    import Dropdown from "./src/index.js";
 
-      const targets = document.querySelectorAll(".button-item");
-      Array.from(targets).forEach((target) => {
-        const content = document.createElement('div');
-        content.innerHTML = 'bottom-left';
-        new Dropdown(target, content, {
-          direction: target.dataset.dropdownDirection,
-          onOpen: function () {
-            console.log("is open");
-          },
-          onClose: function () {
-            console.log("is now closed");
-          }
-        });
+    const targets = document.querySelectorAll(".button-item");
+    Array.from(targets).forEach((target) => {
+      const content = document.createElement('div');
+      content.innerHTML = 'bottom-left';
+      new Dropdown(target, content, {
+        direction: target.dataset.dropdownDirection,
+        onOpen: function () {
+          console.log("is open");
+        },
+        onClose: function () {
+          console.log("is now closed");
+        }
       });
-    </script>
+    });
+  </script>
 </body>
 
 </html>
